@@ -120,6 +120,12 @@
   <data name="BasicSettings.Text" xml:space="preserve">
     <value>Basic GNDHelpdesk Settings</value>
   </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="btnSubmit.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="CollapseAll.Text" xml:space="preserve">
     <value>Collapse All</value>
   </data>

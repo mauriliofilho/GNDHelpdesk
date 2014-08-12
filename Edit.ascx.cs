@@ -40,23 +40,32 @@ namespace GND.Modules.GNDHelpdesk
                 {
                     //get a list of users to assign the user to the Object
                     ddlAssignedUser.DataSource = UserController.GetUsers(PortalId);
-                    ddlAssignedUser.DataTextField = "Username";
+                    ddlAssignedUser.DataTextField = "DisplayName";
                     ddlAssignedUser.DataValueField = "UserId";
                     ddlAssignedUser.DataBind();
+                    
 
                     //check if we have an ID passed in via a querystring parameter, if so, load that item to edit.
                     //ItemId is defined in the ItemModuleBase.cs file
                     if (ItemId > 0)
                     {
-                        var tc = new ItemController();
+                        var tc = new TicketController();
 
-                        var t = tc.GetItem(ItemId, ModuleId);
+                        var t = tc.GetTicket(ItemId, ModuleId);
                         if (t != null)
                         {
-                            txtName.Text = t.ItemName;
-                            txtDescription.Text = t.ItemDescription;
+                            txtDescription.Text = t.TicketName;
+                            txtDetails.Text = t.TicketDescription;
+                            txtDueDate.Text = t.DateDueOn.ToShortDateString();
+                            ddlPriority.Items.FindByValue(t.Priority).Selected = true;
+
                             ddlAssignedUser.Items.FindByValue(t.AssignedUserId.ToString()).Selected = true;
                         }
+                    }
+                    else
+                    {
+                        ddlAssignedUser.Items.Add("Assigned Contact");
+                        ddlAssignedUser.Items.FindByText("Assigned Contact").Selected = true;
                     }
                 }
             }
@@ -69,28 +78,34 @@ namespace GND.Modules.GNDHelpdesk
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            var t = new Item();
-            var tc = new ItemController();
+            var t = new Ticket();
+            var tc = new TicketController();
 
             if (ItemId > 0)
             {
-                t = tc.GetItem(ItemId, ModuleId);
-                t.ItemName = txtName.Text.Trim();
-                t.ItemDescription = txtDescription.Text.Trim();
+                t = tc.GetTicket(ItemId, ModuleId);
+                t.TicketName = txtDescription.Text.Trim();
+                t.TicketDescription = txtDetails.Text.Trim();
+                t.Priority = "Normal";
+                t.Status = "New";
+                t.DateDueOn = Convert.ToDateTime(txtDueDate.Text);
                 t.LastModifiedByUserId = UserId;
                 t.LastModifiedOnDate = DateTime.Now;
                 t.AssignedUserId = Convert.ToInt32(ddlAssignedUser.SelectedValue);
             }
             else
             {
-                t = new Item()
+                t = new Ticket()
                 {
                     AssignedUserId = Convert.ToInt32(ddlAssignedUser.SelectedValue),
                     CreatedByUserId = UserId,
                     CreatedOnDate = DateTime.Now,
-                    ItemName = txtName.Text.Trim(),
-                    ItemDescription = txtDescription.Text.Trim(),
-
+                    TicketName = txtDescription.Text.Trim(),
+                    TicketDescription = txtDetails.Text.Trim(),
+                    DateDueOn = Convert.ToDateTime(txtDueDate.Text),
+                    Status = "New",
+                    Priority = ddlPriority.SelectedValue,
+                  
                 };
             }
 
@@ -98,13 +113,13 @@ namespace GND.Modules.GNDHelpdesk
             t.LastModifiedByUserId = UserId;
             t.ModuleId = ModuleId;
 
-            if (t.ItemId > 0)
+            if (t.TicketId > 0)
             {
-                tc.UpdateItem(t);
+                tc.UpdateTicket(t);
             }
             else
             {
-                tc.CreateItem(t);
+                tc.CreateTicket(t);
             }
             Response.Redirect(DotNetNuke.Common.Globals.NavigateURL());
         }

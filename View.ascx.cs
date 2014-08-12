@@ -12,6 +12,7 @@
 
 using System;
 using System.Web.UI.WebControls;
+using DotNetNuke.Entities.Users;
 using GND.Modules.GNDHelpdesk.Components;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
@@ -41,9 +42,40 @@ namespace GND.Modules.GNDHelpdesk
         {
             try
             {
-                var tc = new ItemController();
-                rptItemList.DataSource = tc.GetItems(ModuleId);
+                var tc = new TicketController();
+                rptItemList.DataSource = tc.GetTickets(ModuleId);
                 rptItemList.DataBind();
+
+                if (!Page.IsPostBack)
+                {
+                    //get a list of users to assign the user to the Object
+                    ddlAssignedUser.DataSource = UserController.GetUsers(PortalId);
+                    ddlAssignedUser.DataTextField = "DisplayName";
+                    ddlAssignedUser.DataValueField = "UserId";
+                    ddlAssignedUser.DataBind();
+
+                    //check if we have an ID passed in via a querystring parameter, if so, load that item to edit.
+                    //ItemId is defined in the ItemModuleBase.cs file
+                    if (ItemId > 0)
+                    {
+                        var t = tc.GetTicket(ItemId, ModuleId);
+
+                        if (t != null)
+                        {
+                            txtDescription.Text = t.TicketName;
+                            txtDetails.Text = t.TicketDescription;
+                            txtDueDate.Text = t.DateDueOn.ToShortDateString();
+                            ddlPriority.Items.FindByValue(t.Priority).Selected = true;
+
+                            ddlAssignedUser.Items.FindByValue(t.AssignedUserId.ToString()).Selected = true;
+                        }
+                    }
+                    else
+                    {
+                        ddlAssignedUser.Items.Add("Assigned Contact");
+                        ddlAssignedUser.Items.FindByText("Assigned Contact").Selected = true;
+                    }
+                }
             }
             catch (Exception exc) //Module failed to load
             {
@@ -60,15 +92,15 @@ namespace GND.Modules.GNDHelpdesk
 
                 var pnlAdminControls = e.Item.FindControl("pnlAdmin") as Panel;
 
-                var t = (Item)e.Item.DataItem;
+                var t = (Ticket)e.Item.DataItem;
 
                 if (IsEditable && lnkDelete != null && lnkEdit != null && pnlAdminControls != null)
                 {
                     pnlAdminControls.Visible = true;
-                    lnkDelete.CommandArgument = t.ItemId.ToString();
+                    lnkDelete.CommandArgument = t.TicketId.ToString();
                     lnkDelete.Enabled = lnkDelete.Visible = lnkEdit.Enabled = lnkEdit.Visible = true;
 
-                    lnkEdit.NavigateUrl = EditUrl(string.Empty, string.Empty, "Edit", "tid=" + t.ItemId);
+                    lnkEdit.NavigateUrl = EditUrl(string.Empty, string.Empty, "Edit", "tid=" + t.TicketId);
 
                     ClientAPI.AddButtonConfirm(lnkDelete, Localization.GetString("ConfirmDelete", LocalResourceFile));
                 }
@@ -108,6 +140,59 @@ namespace GND.Modules.GNDHelpdesk
                     };
                 return actions;
             }
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            var t = new Ticket();
+            var tc = new TicketController();
+
+            if (ItemId > 0)
+            {
+                t = tc.GetTicket(ItemId, ModuleId);
+                t.TicketName = txtDescription.Text.Trim();
+                t.TicketDescription = txtDetails.Text.Trim();
+                t.Priority = "Normal";
+                t.Status = "New";
+                t.DateDueOn = Convert.ToDateTime(txtDueDate.Text);
+                t.LastModifiedByUserId = UserId;
+                t.LastModifiedOnDate = DateTime.Now;
+                t.AssignedUserId = Convert.ToInt32(ddlAssignedUser.SelectedValue);
+            }
+            else
+            {
+                t = new Ticket()
+                {
+                    AssignedUserId = Convert.ToInt32(ddlAssignedUser.SelectedValue),
+                    CreatedByUserId = UserId,
+                    CreatedOnDate = DateTime.Now,
+                    TicketName = txtDescription.Text.Trim(),
+                    TicketDescription = txtDetails.Text.Trim(),
+                    DateDueOn = Convert.ToDateTime(txtDueDate.Text),
+                    Status = "New",
+                    Priority = ddlPriority.SelectedValue,
+
+                };
+            }
+
+            t.LastModifiedOnDate = DateTime.Now;
+            t.LastModifiedByUserId = UserId;
+            t.ModuleId = ModuleId;
+
+            if (t.TicketId > 0)
+            {
+                tc.UpdateTicket(t);
+            }
+            else
+            {
+                tc.CreateTicket(t);
+            }
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL());
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL());
         }
     }
 }
