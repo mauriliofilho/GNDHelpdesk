@@ -1,7 +1,8 @@
 repo_name: mauriliofilho/GNDHelpdesk
 report_id: 8532e7daa7c5a75d9ee230ae3c2e79c4
+version: 0.1
 repo_type: Public
-timestamp: '2023-11-30T15:48:44+00:00'
+timestamp: '2024-01-05T08:31:14+00:00'
 requested_by: gncube
 provider: github
 branch: master
@@ -17,7 +18,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/6755/2c45151a4a11d3a3c8e71bb34dd069d6_400x400.png
-  detection_source_url: github.com/mauriliofilho/GNDHelpdesk/blob/master/GNDHelpdesk.csproj
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk/blob/master/GNDHelpdesk.csproj
   detection_source: GNDHelpdesk.csproj
   last_updated_by: Ivevane
   last_updated_on: 2014-07-04 22:19:37.000000000 Z
@@ -30,6 +31,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1015/1200px-C_Sharp_wordmark.svg.png
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk
   detection_source: Repo Metadata
 - name: CSS 3
   description: The latest evolution of the Cascading Style Sheets language
@@ -39,6 +41,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/6727/css.png
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk
   detection_source: Repo Metadata
 - name: ".NET"
   description: A free, cross-platform, open source developer platform for building
@@ -50,6 +53,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Frameworks (Full Stack)
   image_url: https://img.stackshare.io/service/1014/IoPy1dce_400x400.png
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk/blob/master/packages.config
   detection_source: packages.config
   last_updated_by: Ivevane
   last_updated_on: 2014-07-04 22:19:37.000000000 Z
@@ -61,6 +65,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk
   detection_source: Repo Metadata
 - name: NuGet
   description: The package manager for .NET
@@ -70,6 +75,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Package Managers
   image_url: https://img.stackshare.io/service/2637/6I3oEOP4_400x400.jpg
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk/blob/master/packages.config
   detection_source: packages.config
   last_updated_by: Ivevane
   last_updated_on: 2014-07-04 22:19:37.000000000 Z
@@ -82,6 +88,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Integrated Development Environment
   image_url: https://img.stackshare.io/service/1451/SR2hUhQN.png
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk/blob/master/GNDHelpdesk.sln
   detection_source: GNDHelpdesk.sln
   last_updated_by: Ivevane
   last_updated_on: 2014-07-04 22:19:37.000000000 Z
@@ -91,6 +98,7 @@ tools:
   open_source: false
   hosted_saas: false
   image_url: https://img.stackshare.io/service/2270/no-img-open-source.png
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk/blob/master/Documentation/Documentation.html
   detection_source: Documentation/Documentation.html
   last_updated_by: Ivevane
   last_updated_on: 2014-07-04 22:19:37.000000000 Z
@@ -105,7 +113,7 @@ tools:
   category: Libraries
   sub_category: NuGet Packages
   image_url: https://img.stackshare.io/package/13510/default_1a07a0db93c46d1d55ade89a05ea4821466fe3fa.png
-  detection_source_url: github.com/mauriliofilho/GNDHelpdesk/blob/master/packages.config
+  detection_source_url: https://github.com/mauriliofilho/GNDHelpdesk/blob/master/packages.config
   detection_source: packages.config
   last_updated_by: Ivevane
   last_updated_on: 2014-07-04 22:19:37.000000000 Z
